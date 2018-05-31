@@ -1,0 +1,15 @@
+.thumbnail img {
+    width: 98%;
+}
+
+.thumbnail {
+    padding: 0;
+}
+
+.preShow:hover {
+    border-width: thick;
+}
+
+.thumbnail .caption-full {
+    padding: 9px;
+}
