@@ -1,47 +1,69 @@
 <% include ../partials/header %>
     <h4>
-        <a class="btn btn-xs btn-info" href="/movies">back to movies</a>
+        <a class="btn btn-primary btn-sm " href="/movies">back to movies</a>
     </h4>
     <div class="row">
-            <div class="col-md-6 thumbnail">
-                <img class="img-responsive" src="<%= movie.image %>">
+            <div class="col-md-6">
+                <div class="thumbnail">
+                    <img class="img-responsive" src="<%= movie.image %>">
+                </div>
             </div>
             
-            <div class="col-md-6 well">
-                
-                <div class="caption-full">
-                    <h4><a><%=movie.name%> (<%=movie.year%>)</a></h4>
-                    <h5>Overview:</h5>
-                    <p><%= movie.description %></p>
-                    <p>
-                        <em>Published By <%= movie.author.username %> at <%= movie.createTime.toDateString() %></em>
-                    </p>
-                    <% if(currentUser && movie.author.id.equals(currentUser._id)){ %>
-                        <a class="btn btn-warning" href="/movies/<%= movie._id %>/edit">Edit</a>
-                    <% } %>
-                </div>
-                
-                <div class="text-right">
-                    <a class="btn btn-success" href="/movies/<%= movie._id %>/comments/new">Add New Comment</a>
-                </div>
-                <hr>
-                <% movie.comments.forEach(function(comment){ %>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <strong><%= comment.author.username %></strong>
-                            <span class="pull-right"><%= comment.createTime.toDateString() %></span>
-                       <div>
-                           <%= comment.text %> 
-                            <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
-                                <form style="display: inline" class="pull-right" action="/movies/<%=movie._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
-                                    <button class="btn btn-xs btn-danger">DELETE</button>
-                                    <a href="/movies/<%=movie._id%>/comments/<%=comment._id%>/edit" class="btn btn-xs btn-info">EDIT</a>
-                                </form>
-                            <% } %> 
-                       </div>
+            
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12 caption-full well">
+                        <h4>
+                            <a><%=movie.name%> (<%=movie.year%>)</a> 
+                            <% if(currentUser && movie.author.id.equals(currentUser._id)){ %>
+                                <a class="btn-xs btn-warning" href="/movies/<%= movie._id %>/edit">Edit</a>
+                            <% } %>
+                            <a class="pull-right"><%= movie.rate.toFixed(1) %> / 5.0</a>
+                        </h4>
+                        <h5>Overview:</h5>
+                        <p><%= movie.description %></p>
+                        <p>
+                            <em>Published By <%= movie.author.username %> at <%= movie.createTime.toDateString() %></em>
+                        </p>
+                    </div>
+                    
+                    <div class="col-md-12 well">
+                        <form action="/movies/<%= movie._id %>/rate?_method=put" method="post">
+                            Rate this movie: 
+                            <input type="radio" name="rate" value="1"> 1
+                            <input type="radio" name="rate" value="2"> 2
+                            <input type="radio" name="rate" value="3"> 3
+                            <input type="radio" name="rate" value="4"> 4
+                            <input type="radio" name="rate" value="5"> 5
+                            <button class="btn btn-xs btn-primary ">Submit</button>
+                        </form>
+                    </div>
+                        
+                    
+                    <div class="col-md-12 well">
+                        <div class="row">
+                            <div class="col-md-12 ">
+                                <a class="btn btn-sm btn-info pull-right" href="/movies/<%= movie._id %>/comments/new">Add New Comment</a>
+                            </div>
+                            <hr>
+                            <% movie.comments.forEach(function(comment){ %>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <strong><%= comment.author.username %></strong>
+                                        <span class="pull-right"><%= comment.createTime.toDateString() %></span>
+                                    <div>
+                                    <%= comment.text %> 
+                                    <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
+                                        <form style="display: inline" class="pull-right" action="/movies/<%=movie._id%>/comments/<%=comment._id%>?_method=delete" method="post">
+                                            <button class="btn btn-xs btn-danger">Delete</button>
+                                            <a href="/movies/<%=movie._id%>/comments/<%=comment._id%>/edit" class="btn btn-xs btn-info">Edit</a>
+                                        </form>
+                                    <% } %> 
+                                </div>
+                            <% }) %>
                         </div>
                     </div>
-                <% }) %>
+                </div>
             </div>
     </div>
 

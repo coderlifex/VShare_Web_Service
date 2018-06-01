@@ -1,7 +1,8 @@
 <% include ../partials/header %> 
      <p>
-            <a class="btn btn-primary btn-lg" href="/movies/new">Publish</a>
+            <a class="btn btn-primary btn-md" href="/movies/new">Publish</a>
     </p>
+    
      <div class="row text-center align-items-center" style="display:flex; flex-wrap: wrap;">
         <% movies.forEach(function(movie){ %>
             <div class="col-sm-3" onclick="location.href='/movies/<%= movie._id %>';">
@@ -9,6 +10,7 @@
                    <img src="<%= movie.image %>">
                    <div class="caption">
                        <h4><%= movie.name %> (<%= movie.year %>)</h4>
+                       <h4><%= movie.rate.toFixed(1) %> / 5.0</h4>
                    </div>
                 </div>
             </div>

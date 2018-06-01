@@ -5,6 +5,8 @@ var movieSchema = new mongoose.Schema({
    image: String,
    description: String,
    year: String,
+   rate: Number,
+   rateCount: Number,
    author: {
       id: {
          type: mongoose.Schema.Types.ObjectId,

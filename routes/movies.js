@@ -11,13 +11,7 @@ router.get("/", function(req, res){
        if(err){
            console.log(err);
        } else {
-           request('https://maps.googleapis.com/maps/api/geocode/json?address=sardine%20lake%20ca&key=AIzaSyBtHyZ049G_pjzIXDKsJJB5zMohfN67llM', function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(body); // Show the HTML for the Modulus homepage.
-                res.render("movies/index",{movies:allMovies});
-
-            }
-});
+           res.render("movies/index",{movies:allMovies});
        }
     });
 });
@@ -40,7 +34,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
             console.log(err);
         } else {
             //redirect back to movie page
-            console.log(newlyCreated);
+            console.log('movie: "' + newMovie.name + '" added to database');
             res.redirect("/movies");
         }
     });
@@ -58,15 +52,15 @@ router.get("/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log(foundMovie)
+            //console.log(foundMovie)
             //render show template with that movie
             res.render("movies/show", {movie: foundMovie});
         }
     });
 });
 
+//Edit - show edit page
 router.get("/:id/edit", middleware.checkUserMovie, function(req, res){
-    console.log("IN EDIT!");
     //find the movie with provided ID
     Movie.findById(req.params.id, function(err, foundMovie){
         if(err){
@@ -78,6 +72,7 @@ router.get("/:id/edit", middleware.checkUserMovie, function(req, res){
     });
 });
 
+//Edit - update movie info
 router.put("/:id", function(req, res){
     var newData = {name: req.body.name, year: req.body.year, image: req.body.image, description: req.body.description};
     Movie.findByIdAndUpdate(req.params.id, {$set: newData}, function(err, movie){
@@ -86,6 +81,23 @@ router.put("/:id", function(req, res){
             res.redirect("back");
         } else {
             req.flash("success","Successfully Updated!");
+            res.redirect("/movies/" + movie._id);
+        }
+    });
+});
+
+//Rate movie
+router.put("/:id/rate", middleware.isLoggedIn, function(req, res){
+    var newRate = parseInt(req.body.rate);
+    Movie.findById(req.params.id, function(err, movie){
+        if(err){
+            console.log(err);
+        } else {
+            //update rate
+            var score = movie.rateCount * movie.rate + newRate;
+            movie.rateCount += 1;
+            movie.rate = score/movie.rateCount;
+            movie.save();
             res.redirect("/movies/" + movie._id);
         }
     });
