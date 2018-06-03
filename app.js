@@ -3,7 +3,7 @@ var express     = require("express"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     passport    = require("passport"),
-    cookieParser = require("cookie-parser"),
+ //   cookieParser = require("cookie-parser"),
     LocalStrategy = require("passport-local"),
     flash        = require("connect-flash"),
     Movie  = require("./models/movie"),
@@ -13,12 +13,12 @@ var express     = require("express"),
 //    seedDB      = require("./seeds"),
     methodOverride = require("method-override");
     
-mongoose.connect("mongodb://localhost/movie_v1");
+mongoose.connect("mongodb://vshare:vshare2018@ds241570.mlab.com:41570/vshare");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride('_method'));
-app.use(cookieParser('secret'));
+//app.use(cookieParser('secret'));
 
 // seedDB(); //seed the database
 
